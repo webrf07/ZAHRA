@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANAD | سند - مساعدة في إعداد مذكرات التخرج</title>
+    <style>
+        :root {
+            --beige: #F1D6AE;
+            --burgundy: #570015;
+            --burgundy-dark: #3d0010;
+            --beige-light: #f8e8d0;
+            --white: #fffdf9;
+            --shadow: 0 8px 30px rgba(87, 0, 21, 0.12);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--beige);
+            color: var(--burgundy);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(241, 214, 174, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(87, 0, 21, 0.1);
+            padding: 12px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-placeholder {
+            width: 55px;
+            height: 55px;
+            border: 2px dashed var(--burgundy);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            text-align: center;
+            color: var(--burgundy);
+            background: var(--beige-light);
+            flex-shrink: 0;
+        }
+
+        .site-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .lang-switch { display: flex; gap: 6px; }
+
+        .lang-btn {
+            background: transparent;
+            border: 2px solid var(--burgundy);
+            color: var(--burgundy);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .lang-btn.active,
+        .lang-btn:hover {
+            background: var(--burgundy);
+            color: var(--beige);
+        }
+
+        .menu-wrapper { position: relative; }
+
+        .menu-toggle {
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--burgundy);
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.25s;
+        }
+
+        .menu-toggle:hover { background: var(--burgundy); }
+
+        .menu-toggle span {
+            display: block;
+            width: 5px;
+            height: 5px;
+            background: var(--burgundy);
+            border-radius: 50%;
+            transition: background 0.25s;
+        }
+
+        .menu-toggle:hover span { background: var(--beige); }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 55px;
+            left: 0;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            min-width: 220px;
+            padding: 12px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(87, 0, 21, 0.08);
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 24px;
+            color: var(--burgundy);
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover { background: var(--beige); }
+
+        /* Hero */
+        .hero {
+            width: 100%;
+            height: 420px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #3d0010 0%, #570015 40%, #8b1a2e 100%);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(241, 214, 174, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(241, 214, 174, 0.1) 0%, transparent 40%),
+                linear-gradient(to bottom, transparent 60%, rgba(241, 214, 174, 0.3));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+            color: var(--beige);
+        }
+
+        .hero-content h1 {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            margin-bottom: 16px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            max-width: 650px;
+            opacity: 0.95;
+        }
+
+        .hero-shapes { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+        .shape { position: absolute; border-radius: 50%; background: rgba(241, 214, 174, 0.08); }
+        .shape1 { width: 300px; height: 300px; top: -80px; right: -50px; }
+        .shape2 { width: 200px; height: 200px; bottom: 40px; left: 10%; }
+        .shape3 { width: 150px; height: 150px; top: 30%; left: 60%; background: rgba(241, 214, 174, 0.05); }
+
+        /* Sections */
+        section {
+            padding: 70px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 45px;
+            opacity: 0.85;
+            font-size: 1.05rem;
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(87, 0, 21, 0.06);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(87, 0, 21, 0.18);
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--beige);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 18px;
+        }
+
+        .service-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+        .service-card p { flex-grow: 1; margin-bottom: 22px; font-size: 0.98rem; opacity: 0.9; }
+
+        .btn {
+            display: inline-block;
+            background: var(--burgundy);
+            color: var(--beige);
+            padding: 12px 26px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--burgundy-dark);
+            transform: scale(1.03);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--burgundy);
+            color: var(--burgundy);
+        }
+
+        .btn-outline:hover {
+            background: var(--burgundy);
+            color: var(--beige);
+        }
+
+        /* Prices */
+        .prices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .price-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .price-card:hover { border-color: var(--burgundy); }
+        .price-card.featured {
+            border-color: var(--burgundy);
+            transform: scale(1.03);
+        }
+
+        .price-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .price-amount { font-size: 2rem; font-weight: 800; margin: 12px 0; }
+        .price-amount span { font-size: 1rem; font-weight: 500; }
+
+        .price-card ul {
+            list-style: none;
+            margin: 20px 0;
+            text-align: right;
+        }
+
+        .price-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(87, 0, 21, 0.08);
+            font-size: 0.95rem;
+        }
+
+        /* How we work */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .step { text-align: center; }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--burgundy);
+            color: var(--beige);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 18px;
+        }
+
+        .step h4 { margin-bottom: 10px; font-size: 1.15rem; }
+
+        /* Booking Form */
+        .booking-section {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full { grid-column: 1 / -1; }
+
+        label { font-weight: 600; font-size: 0.95rem; }
+
+        input, select, textarea {
+            padding: 13px 16px;
+            border: 2px solid rgba(87, 0, 21, 0.15);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--beige-light);
+            color: var(--burgundy);
+            transition: border-color 0.25s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--burgundy);
+        }
+
+        textarea { resize: vertical; min-height: 110px; }
+
+        .form-submit {
+            margin-top: 10px;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background: var(--burgundy);
+            color: var(--beige);
+            text-align: center;
+            padding: 35px 5%;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .hero { height: 360px; }
+            .booking-section { padding: 35px 22px; }
+            .site-name { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <div class="logo-placeholder">
+                شعار<br>SANAD
+            </div>
+            <div class="site-name">SANAD</div>
+        </div>
+
+        <div class="header-actions">
+            <div class="lang-switch">
+                <button class="lang-btn active" data-lang="ar">AR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+
+            <div class="menu-wrapper">
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="dropdown-menu" id="dropdownMenu">
+                    <a href="#home" data-i18n="nav_home">الصفحة الرئيسية</a>
+                    <a href="#services" data-i18n="nav_services">خدماتنا</a>
+                    <a href="#prices" data-i18n="nav_prices">الأسعار</a>
+                    <a href="#how" data-i18n="nav_how">كيف نعمل</a>
+                    <a href="#booking" data-i18n="nav_booking">احجز موعداً</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-shapes">
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 data-i18n="hero_title">سندك الأكاديمي في رحلة التخرج</h1>
+            <p data-i18n="hero_desc">نرافقك خطوة بخطوة في إعداد مذكرة التخرج باحترافية ومنهجية علمية دقيقة، من الفكرة إلى المناقشة.</p>
+        </div>
+    </section>
+
+    <section id="services">
+        <h2 class="section-title" data-i18n="services_title">خدماتنا</h2>
+        <p class="section-subtitle" data-i18n="services_sub">نقدم مجموعة متكاملة من الخدمات الأكاديمية لمساعدتك على إنجاز مذكرة تخرج متميزة</p>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">📘</div>
+                <h3 data-i18n="s1_title">استشارات منهجية البحث</h3>
+                <p data-i18n="s1_desc">نساعدك في اختيار الموضوع، صياغة الإشكالية، وبناء خطة البحث بما يتوافق مع تخصصك ومتطلبات الجامعة.</p>
+                <a href="#booking" class="btn" data-i18n="book_service">احجز الخدمة</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🔍</div>
+                <h3 data-i18n="s2_title">البحث عن المراجع العلمية</h3>
+                <p data-i18n="s2_desc">نوفر لك مراجع حديثة وموثوقة، مع تدريبك على كيفية البحث عنها وتنظيمها حسب معايير التوثيق الأكاديمي.</p>
+                <a href="#booking" class="btn" data-i18n="book_service">احجز الخدمة</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3 data-i18n="s3_title">التدريب الإحصائي</h3>
+                <p data-i18n="s3_desc">تدريب عملي على SPSS و Excel لتحليل البيانات الكمية والكيفية، مع تفسير النتائج بطريقة علمية واضحة.</p>
+                <a href="#booking" class="btn" data-i18n="book_service">احجز الخدمة</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">✍️</div>
+                <h3 data-i18n="s4_title">التدقيق اللغوي</h3>
+                <p data-i18n="s4_desc">مراجعة لغوية وأسلوبية دقيقة للمذكرة، مع تصحيح الأخطاء وتحسين الصياغة الأكاديمية.</p>
+                <a href="#booking" class="btn" data-i18n="book_service">احجز الخدمة</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">📐</div>
+                <h3 data-i18n="s5_title">التنسيق الأكاديمي</h3>
+                <p data-i18n="s5_desc">تنسيق كامل للمذكرة وفق دليل الجامعة (هوامش، خطوط، عناوين، جداول، قائمة مراجع).</p>
+                <a href="#booking" class="btn" data-i18n="book_service">احجز الخدمة</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🎤</div>
+                <h3 data-i18n="s6_title">التحضير للمناقشة</h3>
+                <p data-i18n="s6_desc">إعداد عرض PowerPoint احترافي، وتدريب على الأسئلة المتوقعة ومحاكاة جلسة المناقشة.</p>
+                <a href="#booking" class="btn" data-i18n="book_service">احجز الخدمة</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="prices">
+        <h2 class="section-title" data-i18n="prices_title">الأسعار</h2>
+        <p class="section-subtitle" data-i18n="prices_sub">أسعار شفافة تبدأ من 1000 دينار جزائري — اختر الباقة التي تناسب احتياجاتك</p>
+
+        <div class="prices-grid">
+            <div class="price-card">
+                <h3 data-i18n="p1_title">الباقة الأساسية</h3>
+                <div class="price-amount">1000 <span data-i18n="currency">دج</span></div>
+                <ul>
+                    <li data-i18n="p1_f1">استشارة منهجية أولية</li>
+                    <li data-i18n="p1_f2">مراجعة هيكل المذكرة</li>
+                    <li data-i18n="p1_f3">دعم عبر الرسائل</li>
+                </ul>
+                <a href="#booking" class="btn btn-outline" data-i18n="book_now">احجز الآن</a>
+            </div>
+
+            <div class="price-card featured">
+                <h3 data-i18n="p2_title">الباقة المتقدمة</h3>
+                <div class="price-amount">3500 <span data-i18n="currency">دج</span></div>
+                <ul>
+                    <li data-i18n="p2_f1">كل ما في الباقة الأساسية</li>
+                    <li data-i18n="p2_f2">بحث عن المراجع العلمية</li>
+                    <li data-i18n="p2_f3">تدقيق لغوي جزئي</li>
+                    <li data-i18n="p2_f4">جلسة متابعة واحدة</li>
+                </ul>
+                <a href="#booking" class="btn" data-i18n="book_now">احجز الآن</a>
+            </div>
+
+            <div class="price-card">
+                <h3 data-i18n="p3_title">الباقة الشاملة</h3>
+                <div class="price-amount">7500 <span data-i18n="currency">دج</span></div>
+                <ul>
+                    <li data-i18n="p3_f1">مرافقة كاملة حتى المناقشة</li>
+                    <li data-i18n="p3_f2">تحليل إحصائي + تدريب</li>
+                    <li data-i18n="p3_f3">تدقيق لغوي كامل</li>
+                    <li data-i18n="p3_f4">تنسيق أكاديمي + عرض مناقشة</li>
+                </ul>
+                <a href="#booking" class="btn btn-outline" data-i18n="book_now">احجز الآن</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="how">
+        <h2 class="section-title" data-i18n="how_title">كيف نعمل</h2>
+        <p class="section-subtitle" data-i18n="how_sub">أربع خطوات بسيطة لنصل معك إلى مذكرة تخرج جاهزة بثقة</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4 data-i18n="step1_t">احجز موعدك</h4>
+                <p data-i18n="step1_d">املأ النموذج وحدد الخدمة والمستوى والطريقة المناسبة لك.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4 data-i18n="step2_t">جلسة تشخيص</h4>
+                <p data-i18n="step2_d">نتعرف على موضوعك واحتياجاتك ونضع خطة عمل واضحة.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h4 data-i18n="step3_t">التنفيذ والمتابعة</h4>
+                <p data-i18n="step3_d">نعمل معك خطوة بخطوة مع تحديثات دورية ودعم مستمر.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h4 data-i18n="step4_t">التسليم والاستعداد</h4>
+                <p data-i18n="step4_d">نسلم النسخة النهائية ونجهزك للمناقشة بثقة تامة.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking">
+        <h2 class="section-title" data-i18n="booking_title">احجز موعدك الآن</h2>
+        <p class="section-subtitle" data-i18n="booking_sub">املأ البيانات التالية وسنتواصل معك في أقرب وقت</p>
+
+        <div class="booking-section">
+            <form id="bookingForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="firstName" data-i18n="label_fname">الاسم</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" data-i18n="label_lname">اللقب</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age" data-i18n="label_age">العمر</label>
+                        <input type="number" id="age" name="age" min="18" max="60" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" data-i18n="label_phone">رقم الهاتف</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="05xx xxx xxx">
+                    </div>
+                    <div class="form-group">
+                        <label for="level" data-i18n="label_level">المستوى الجامعي</label>
+                        <select id="level" name="level" required>
+                            <option value="" data-i18n="select_level">اختر المستوى</option>
+                            <option value="licence" data-i18n="level_licence">ليسانس</option>
+                            <option value="master" data-i18n="level_master">ماستر</option>
+                            <option value="doctorate" data-i18n="level_doctorate">دكتوراه</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="method" data-i18n="label_method">طريقة الاستفادة</label>
+                        <select id="method" name="method" required>
+                            <option value="" data-i18n="select_method">اختر الطريقة</option>
+                            <option value="online" data-i18n="method_online">عن بعد</option>
+                            <option value="presentiel" data-i18n="method_presentiel">حضوري</option>
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label for="service" data-i18n="label_service">الخدمة المطلوبة</label>
+                        <select id="service" name="service" required>
+                            <option value="" data-i18n="select_service">اختر الخدمة</option>
+                            <option value="methodology" data-i18n="s1_title">استشارات منهجية البحث</option>
+                            <option value="references" data-i18n="s2_title">البحث عن المراجع العلمية</option>
+                            <option value="statistics" data-i18n="s3_title">التدريب الإحصائي</option>
+                            <option value="proofreading" data-i18n="s4_title">التدقيق اللغوي</option>
+                            <option value="formatting" data-i18n="s5_title">التنسيق الأكاديمي</option>
+                            <option value="defense" data-i18n="s6_title">التحضير للمناقشة</option>
+                            <option value="full" data-i18n="service_full">باقة شاملة</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date" data-i18n="label_date">التاريخ المفضل</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group full">
+                        <label for="notes" data-i18n="label_notes">ملاحظات إضافية</label>
+                        <textarea id="notes" name="notes" data-i18n-placeholder="notes_ph" placeholder="اكتب أي تفاصيل إضافية تساعدنا على خدمتك بشكل أفضل..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn form-submit" data-i18n="submit_btn">إرسال الطلب</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p data-i18n="footer">© 2025 SANAD — سندك الأكاديمي في رحلة التخرج. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        const translations = {
+            ar: {
+                nav_home: "الصفحة الرئيسية",
+                nav_services: "خدماتنا",
+                nav_prices: "الأسعار",
+                nav_how: "كيف نعمل",
+                nav_booking: "احجز موعداً",
+                hero_title: "سندك الأكاديمي في رحلة التخرج",
+                hero_desc: "نرافقك خطوة بخطوة في إعداد مذكرة التخرج باحترافية ومنهجية علمية دقيقة، من الفكرة إلى المناقشة.",
+                services_title: "خدماتنا",
+                services_sub: "نقدم مجموعة متكاملة من الخدمات الأكاديمية لمساعدتك على إنجاز مذكرة تخرج متميزة",
+                s1_title: "استشارات منهجية البحث",
+                s1_desc: "نساعدك في اختيار الموضوع، صياغة الإشكالية، وبناء خطة البحث بما يتوافق مع تخصصك ومتطلبات الجامعة.",
+                s2_title: "البحث عن المراجع العلمية",
+                s2_desc: "نوفر لك مراجع حديثة وموثوقة، مع تدريبك على كيفية البحث عنها وتنظيمها حسب معايير التوثيق الأكاديمي.",
+                s3_title: "التدريب الإحصائي",
+                s3_desc: "تدريب عملي على SPSS و Excel لتحليل البيانات الكمية والكيفية، مع تفسير النتائج بطريقة علمية واضحة.",
+                s4_title: "التدقيق اللغوي",
+                s4_desc: "مراجعة لغوية وأسلوبية دقيقة للمذكرة، مع تصحيح الأخطاء وتحسين الصياغة الأكاديمية.",
+                s5_title: "التنسيق الأكاديمي",
+                s5_desc: "تنسيق كامل للمذكرة وفق دليل الجامعة (هوامش، خطوط، عناوين، جداول، قائمة مراجع).",
+                s6_title: "التحضير للمناقشة",
+                s6_desc: "إعداد عرض PowerPoint احترافي، وتدريب على الأسئلة المتوقعة ومحاكاة جلسة المناقشة.",
+                book_service: "احجز الخدمة",
+                prices_title: "الأسعار",
+                prices_sub: "أسعار شفافة تبدأ من 1000 دينار جزائري — اختر الباقة التي تناسب احتياجاتك",
+                p1_title: "الباقة الأساسية",
+                p1_f1: "استشارة منهجية أولية",
+                p1_f2: "مراجعة هيكل المذكرة",
+                p1_f3: "دعم عبر الرسائل",
+                p2_title: "الباقة المتقدمة",
+                p2_f1: "كل ما في الباقة الأساسية",
+                p2_f2: "بحث عن المراجع العلمية",
+                p2_f3: "تدقيق لغوي جزئي",
+                p2_f4: "جلسة متابعة واحدة",
+                p3_title: "الباقة الشاملة",
+                p3_f1: "مرافقة كاملة حتى المناقشة",
+                p3_f2: "تحليل إحصائي + تدريب",
+                p3_f3: "تدقيق لغوي كامل",
+                p3_f4: "تنسيق أكاديمي + عرض مناقشة",
+                currency: "دج",
+                book_now: "احجز الآن",
+                how_title: "كيف نعمل",
+                how_sub: "أربع خطوات بسيطة لنصل معك إلى مذكرة تخرج جاهزة بثقة",
+                step1_t: "احجز موعدك",
+                step1_d: "املأ النموذج وحدد الخدمة والمستوى والطريقة المناسبة لك.",
+                step2_t: "جلسة تشخيص",
+                step2_d: "نتعرف على موضوعك واحتياجاتك ونضع خطة عمل واضحة.",
+                step3_t: "التنفيذ والمتابعة",
+                step3_d: "نعمل معك خطوة بخطوة مع تحديثات دورية ودعم مستمر.",
+                step4_t: "التسليم والاستعداد",
+                step4_d: "نسلم النسخة النهائية ونجهزك للمناقشة بثقة تامة.",
+                booking_title: "احجز موعدك الآن",
+                booking_sub: "املأ البيانات التالية وسنتواصل معك في أقرب وقت",
+                label_fname: "الاسم",
+                label_lname: "اللقب",
+                label_age: "العمر",
+                label_phone: "رقم الهاتف",
+                label_level: "المستوى الجامعي",
+                label_method: "طريقة الاستفادة",
+                label_service: "الخدمة المطلوبة",
+                label_date: "التاريخ المفضل",
+                label_notes: "ملاحظات إضافية",
+                select_level: "اختر المستوى",
+                level_licence: "ليسانس",
+                level_master: "ماستر",
+                level_doctorate: "دكتوراه",
+                select_method: "اختر الطريقة",
+                method_online: "عن بعد",
+                method_presentiel: "حضوري",
+                select_service: "اختر الخدمة",
+                service_full: "باقة شاملة",
+                notes_ph: "اكتب أي تفاصيل إضافية تساعدنا على خدمتك بشكل أفضل...",
+                submit_btn: "إرسال الطلب",
+                footer: "© 2025 SANAD — سندك الأكاديمي في رحلة التخرج. جميع الحقوق محفوظة.",
+                form_success: "تم إرسال طلبك بنجاح! سنتواصل معك قريباً."
+            },
+            en: {
+                nav_home: "Home",
+                nav_services: "Our Services",
+                nav_prices: "Pricing",
+                nav_how: "How We Work",
+                nav_booking: "Book Appointment",
+                hero_title: "Your Academic Support on the Graduation Journey",
+                hero_desc: "We accompany you step by step in preparing your thesis with professionalism and rigorous scientific methodology, from idea to defense.",
+                services_title: "Our Services",
+                services_sub: "A complete set of academic services to help you produce an outstanding graduation thesis",
+                s1_title: "Research Methodology Consultation",
+                s1_desc: "We help you choose the topic, formulate the research problem, and build a research plan that matches your field and university requirements.",
+                s2_title: "Scientific References Search",
+                s2_desc: "We provide recent and reliable references and train you on how to find and organize them according to academic citation standards.",
+                s3_title: "Statistical Training",
+                s3_desc: "Practical training on SPSS and Excel for quantitative and qualitative data analysis, with clear scientific interpretation of results.",
+                s4_title: "Language Proofreading",
+                s4_desc: "Precise linguistic and stylistic review of the thesis, correcting errors and improving academic style.",
+                s5_title: "Academic Formatting",
+                s5_desc: "Full formatting of the thesis according to the university guide (margins, fonts, headings, tables, reference list).",
+                s6_title: "Defense Preparation",
+                s6_desc: "Professional PowerPoint presentation, training on expected questions, and simulation of the defense session.",
+                book_service: "Book Service",
+                prices_title: "Pricing",
+                prices_sub: "Transparent prices starting from 1000 Algerian Dinars — choose the package that fits your needs",
+                p1_title: "Basic Package",
+                p1_f1: "Initial methodology consultation",
+                p1_f2: "Thesis structure review",
+                p1_f3: "Support via messaging",
+                p2_title: "Advanced Package",
+                p2_f1: "Everything in Basic",
+                p2_f2: "Scientific references search",
+                p2_f3: "Partial language proofreading",
+                p2_f4: "One follow-up session",
+                p3_title: "Complete Package",
+                p3_f1: "Full support until defense",
+                p3_f2: "Statistical analysis + training",
+                p3_f3: "Full language proofreading",
+                p3_f4: "Academic formatting + defense presentation",
+                currency: "DZD",
+                book_now: "Book Now",
+                how_title: "How We Work",
+                how_sub: "Four simple steps to reach a confident, ready-to-defend thesis",
+                step1_t: "Book Your Appointment",
+                step1_d: "Fill the form and select the service, level and method that suit you.",
+                step2_t: "Diagnostic Session",
+                step2_d: "We learn about your topic and needs and set a clear work plan.",
+                step3_t: "Execution & Follow-up",
+                step3_d: "We work with you step by step with regular updates and continuous support.",
+                step4_t: "Delivery & Preparation",
+                step4_d: "We deliver the final version and prepare you thoroughly for the defense.",
+                booking_title: "Book Your Appointment Now",
+                booking_sub: "Fill in the following details and we will contact you as soon as possible",
+                label_fname: "First Name",
+                label_lname: "Last Name",
+                label_age: "Age",
+                label_phone: "Phone Number",
+                label_level: "University Level",
+                label_method: "Mode of Service",
+                label_service: "Required Service",
+                label_date: "Preferred Date",
+                label_notes: "Additional Notes",
+                select_level: "Select level",
+                level_licence: "Bachelor (Licence)",
+                level_master: "Master",
+                level_doctorate: "Doctorate",
+                select_method: "Select mode",
+                method_online: "Online / Remote",
+                method_presentiel: "In-person",
+                select_service: "Select service",
+                service_full: "Complete Package",
+                notes_ph: "Write any additional details that help us serve you better...",
+                submit_btn: "Submit Request",
+                footer: "© 2025 SANAD — Your academic support on the graduation journey. All rights reserved.",
+                form_success: "Your request has been sent successfully! We will contact you soon."
+            }
+        };
+
+        let currentLang = 'ar';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('select option[data-i18n]').forEach(opt => {
+                const key = opt.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    opt.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+        });
+
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!dropdownMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        dropdownMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => dropdownMenu.classList.remove('show'));
+        });
+
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert(translations[currentLang].form_success);
+            this.reset();
+        });
+
+        const dateInput = document.getElementById('date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+
+        setLanguage('ar');
+    </script>
+</body>
+</html>
